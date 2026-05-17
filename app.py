@@ -1,6 +1,16 @@
+import os
+import json
 from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+from dotenv import load_dotenv
+from google import genai
+
+# Carrega as variáveis de ambiente do arquivo .env
+load_dotenv()
+
+# Configura a chave API do Gemini
+client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 
 # Inicializa o app Flask
 app = Flask(__name__)
@@ -163,6 +173,57 @@ def excluir_plano(id):
 @app.route('/health', methods=['GET'])
 def health_check():
     return jsonify({"status": "ok", "message": "API rodando e banco de dados configurado!"}), 200
+
+# --- ROTA DE INTELIGÊNCIA ARTIFICIAL ---
+
+@app.route('/smart-assist', methods=['POST'])
+def smart_assist():
+    dados = request.get_json()
+    
+    titulo = dados.get('titulo')
+    disciplina = dados.get('disciplina')
+    ementa = dados.get('ementa')
+    
+    # Valida se o frontend mandou o básico para a IA pensar
+    if not all([titulo, disciplina, ementa]):
+        return jsonify({"erro": "Título, disciplina e ementa são obrigatórios para a IA."}), 400
+        
+    # Engenharia de Prompt focada em JSON
+    prompt = f"""
+    Você é um Assistente Pedagógico especializado em planejamento de aulas.
+    Com base nos dados fornecidos da aula, sugira conteúdos complementares, tópicos relacionados e exatamente 3 tags recomendadas.
+    
+    Dados da Aula:
+    - Título: {titulo}
+    - Disciplina: {disciplina}
+    - Ementa/Resumo: {ementa}
+    
+    Responda ESTRITAMENTE em formato JSON, sem formatação markdown (como ```json), usando a seguinte estrutura:
+    {{
+        "conteudos_complementares": "texto corrido com as sugestões",
+        "topicos_relacionados": "texto corrido com os tópicos",
+        "tags_recomendadas": "Tag1, Tag2, Tag3"
+    }}
+    """
+    
+    try:
+        # Usando a nova estrutura da biblioteca e um modelo atualizado
+        response = client.models.generate_content(
+            model='gemini-2.5-flash',
+            contents=prompt
+        )
+        
+        # Limpeza de segurança caso a IA retorne formatação markdown por engano
+        texto_limpo = response.text.replace('```json', '').replace('```', '').strip()
+        
+        # Converte a string JSON da IA para um dicionário Python
+        resultado_json = json.loads(texto_limpo)
+        
+        return jsonify(resultado_json), 200
+        
+    except Exception as e:
+        # Captura e exibe o erro caso a API falhe
+        return jsonify({"erro": "Falha ao se comunicar com a IA", "detalhe": str(e)}), 500
 
 # Executa a aplicação
 if __name__ == '__main__':
