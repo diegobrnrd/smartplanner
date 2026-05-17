@@ -2,6 +2,7 @@ import os
 import json
 from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
+from flask_cors import CORS
 from datetime import datetime
 from dotenv import load_dotenv
 from google import genai
@@ -14,6 +15,7 @@ client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 
 # Inicializa o app Flask
 app = Flask(__name__)
+CORS(app) # Libera a comunicação com o frontend
 
 # Configura o banco de dados SQLite local
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///planos_aula.db'

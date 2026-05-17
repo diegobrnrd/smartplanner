@@ -1,0 +1,27 @@
+/* Efeito de sobreposição para o carregamento da IA */
+#ai-loading {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(3px); /* Deixa o fundo levemente borrado */
+    z-index: 1050;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 0.5rem;
+}
+
+/* Utilitário essencial para alternar entre as telas na SPA */
+.d-none {
+    display: none !important;
+}
+
+/* Um toque extra para as linhas da tabela ficarem clicáveis/agradáveis */
+.table-hover tbody tr {
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
