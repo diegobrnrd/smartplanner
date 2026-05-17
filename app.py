@@ -1,5 +1,7 @@
 import os
 import json
+import logging
+import time
 from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
@@ -16,6 +18,14 @@ client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 # Inicializa o app Flask
 app = Flask(__name__)
 CORS(app) # Libera a comunicação com o frontend
+
+# --- CONFIGURAÇÃO DE OBSERVABILIDADE (LOGS) ---
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s [%(levelname)s] %(message)s',
+    datefmt='%Y-%m-%d %H:%M:%S'
+)
+logger = logging.getLogger(__name__)
 
 # Configura o banco de dados SQLite local
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///planos_aula.db'
@@ -82,6 +92,7 @@ def criar_plano():
     
     db.session.add(novo_plano)
     db.session.commit()
+    logger.info(f'Plano Criado: ID={novo_plano.id}, Titulo="{novo_plano.titulo}"')
     
     return jsonify({"mensagem": "Plano criado com sucesso!", "plano": novo_plano.to_dict()}), 201
 
@@ -139,7 +150,7 @@ def listar_planos():
 # 3. Endpoint: Editar um Plano de Aula (Atualização)
 @app.route('/planos/<int:id>', methods=['PUT'])
 def editar_plano(id):
-    plano = PlanoAula.query.get(id)
+    plano = db.session.get(PlanoAula, id)
     if not plano:
         return jsonify({"erro": "Plano de aula não encontrado."}), 404
         
@@ -162,12 +173,13 @@ def editar_plano(id):
 # 4. Endpoint: Excluir um Plano de Aula
 @app.route('/planos/<int:id>', methods=['DELETE'])
 def excluir_plano(id):
-    plano = PlanoAula.query.get(id)
+    plano = db.session.get(PlanoAula, id)
     if not plano:
         return jsonify({"erro": "Plano de aula não encontrado."}), 404
         
     db.session.delete(plano)
     db.session.commit()
+    logger.info(f'Plano Excluído: ID={id}')
     
     return jsonify({"mensagem": "Plano excluído com sucesso!"}), 200
 
@@ -208,23 +220,34 @@ def smart_assist():
     }}
     """
     
+    start_time = time.time() # Inicia o cronômetro de latência
+    
     try:
-        # Usando a nova estrutura da biblioteca e um modelo atualizado
         response = client.models.generate_content(
             model='gemini-2.5-flash',
             contents=prompt
         )
         
-        # Limpeza de segurança caso a IA retorne formatação markdown por engano
-        texto_limpo = response.text.replace('```json', '').replace('```', '').strip()
+        latency = round(time.time() - start_time, 2) # Calcula o tempo em segundos
         
-        # Converte a string JSON da IA para um dicionário Python
+        # Tenta capturar o uso de tokens da API do Gemini
+        try:
+            token_usage = response.usage_metadata.total_token_count
+        except AttributeError:
+            token_usage = "N/A"
+            
+        # LOG ESTRUTURADO CONFORME O DESAFIO
+        logger.info(f'AI Request: Title="{titulo}", Discipline="{disciplina}", Token Usage={token_usage}, Latency={latency}s')
+        
+        # Limpeza e retorno
+        texto_limpo = response.text.replace('```json', '').replace('```', '').strip()
         resultado_json = json.loads(texto_limpo)
         
         return jsonify(resultado_json), 200
         
     except Exception as e:
-        # Captura e exibe o erro caso a API falhe
+        latency = round(time.time() - start_time, 2)
+        logger.error(f'AI Request Error: Title="{titulo}", Latency={latency}s, Error="{str(e)}"')
         return jsonify({"erro": "Falha ao se comunicar com a IA", "detalhe": str(e)}), 500
 
 # Executa a aplicação

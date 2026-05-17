@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  # O nosso Backend Flask
+  api:
+    build: .
+    ports:
+      - "5000:5000"
+    env_file:
+      - .env
+    volumes:
+      - ./instance:/app/instance # Mantém o banco de dados salvo na máquina local
+    restart: unless-stopped
+
+  # Servidor web super leve (Nginx) para servir a pasta Frontend (SPA)
+  frontend:
+    image: nginx:alpine
+    ports:
+      - "8080:80"
+    volumes:
+      - ./frontend:/usr/share/nginx/html:ro
+    depends_on:
+      - api
+    restart: unless-stopped
