@@ -188,6 +188,34 @@ def excluir_plano(id):
 def health_check():
     return jsonify({"status": "ok", "message": "API rodando e banco de dados configurado!"}), 200
 
+# Endpoint visual para a raiz da API (evita o erro 404)
+@app.route('/', methods=['GET'])
+def index():
+    return """
+    <!DOCTYPE html>
+    <html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8">
+        <title>API SmartPlanner</title>
+        <style>
+            body { font-family: Arial, sans-serif; text-align: center; margin-top: 10vh; background-color: #f8f9fa; color: #333; }
+            h1 { color: #0d6efd; }
+            .container { background: white; padding: 40px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); display: inline-block; }
+            a { display: inline-block; margin-top: 20px; padding: 10px 20px; background-color: #0d6efd; color: white; text-decoration: none; border-radius: 5px; font-weight: bold; }
+            a:hover { background-color: #0b5ed7; }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>🚀 API SmartPlanner Online!</h1>
+            <p>O backend (servidor) está rodando perfeitamente e aguardando conexões.</p>
+            <p>Para interagir com o sistema, acesse a interface visual do frontend:</p>
+            <a href="http://localhost:8080">Ir para o Frontend (Porta 8080)</a>
+        </div>
+    </body>
+    </html>
+    """, 200
+
 # --- ROTA DE INTELIGÊNCIA ARTIFICIAL ---
 
 @app.route('/smart-assist', methods=['POST'])
