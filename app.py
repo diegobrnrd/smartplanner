@@ -167,6 +167,7 @@ def editar_plano(id):
     plano.tags = dados.get('tags', plano.tags)
     
     db.session.commit()
+    logger.info(f'Plano Editado: ID={id}, Titulo="{plano.titulo}"')
     
     return jsonify({"mensagem": "Plano atualizado com sucesso!", "plano": plano.to_dict()}), 200
 
