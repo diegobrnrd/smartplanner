@@ -210,8 +210,7 @@ def index():
         <div class="container">
             <h1>🚀 API SmartPlanner Online!</h1>
             <p>O backend (servidor) está rodando perfeitamente e aguardando conexões.</p>
-            <p>Para interagir com o sistema, acesse a interface visual do frontend:</p>
-            <a href="http://localhost:8080">Ir para o Frontend (Porta 8080)</a>
+            <p>Para interagir com o sistema, acesse a interface visual do frontend.</p>
         </div>
     </body>
     </html>
