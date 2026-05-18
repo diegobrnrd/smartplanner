@@ -22,6 +22,9 @@ const btnAnt = document.getElementById('btn-ant');
 const btnProx = document.getElementById('btn-prox');
 const infoPaginacao = document.getElementById('info-paginacao');
 
+const btnImprimir = document.getElementById('btn-imprimir');
+const btnCompartilhar = document.getElementById('btn-compartilhar');
+
 // ==========================================
 // 1. NAVEGAÇÃO DA SPA
 // ==========================================
@@ -139,6 +142,7 @@ async function carregarPlanos() {
                     <td>${dataBr}</td>
                     <td class="small text-muted">${plano.tags}</td>
                     <td class="text-end">
+                        <button class="btn btn-sm btn-outline-info me-1" onclick="visualizarPlano(${plano.id})">Visualizar</button>
                         <button class="btn btn-sm btn-outline-primary me-1" onclick="carregarParaEdicao(${plano.id})">Editar</button>
                         <button class="btn btn-sm btn-outline-danger" onclick="excluirPlano(${plano.id})">Excluir</button>
                     </td>
@@ -211,6 +215,277 @@ formPlano.addEventListener('submit', async (e) => {
 // ==========================================
 // 5. CRUD: EDITAR E EXCLUIR
 // ==========================================
+// Instância do Modal do Bootstrap
+const modalVisualizar = new bootstrap.Modal(document.getElementById('modalVisualizar'));
+
+// Função para abrir o plano em modo somente leitura
+window.visualizarPlano = async (id) => {
+    try {
+        const response = await fetch(`${API_URL}/planos?titulo=`);
+        const data = await response.json();
+        const plano = data.planos.find(p => p.id === id);
+
+        if (plano) {
+            document.getElementById('vis-titulo').innerText = plano.titulo;
+            document.getElementById('vis-disciplina').innerText = plano.disciplina;
+
+            const dataBr = plano.data_prevista.split('-').reverse().join('/');
+            document.getElementById('vis-data').innerText = dataBr;
+
+            document.getElementById('vis-ementa').innerText = plano.ementa;
+            document.getElementById('vis-objetivo').innerText = plano.objetivo;
+            document.getElementById('vis-conteudos').innerText = plano.conteudos;
+            document.getElementById('vis-recursos').innerText = plano.recursos_apoio;
+            document.getElementById('vis-tags').innerText = plano.tags;
+
+            modalVisualizar.show();
+        }
+    } catch (error) {
+        console.error('Erro ao carregar dados para visualização:', error);
+    }
+};
+
+function obterTextoPlanoVisualizado() {
+    return [
+        `Título: ${document.getElementById('vis-titulo').innerText}`,
+        `Disciplina: ${document.getElementById('vis-disciplina').innerText}`,
+        `Data: ${document.getElementById('vis-data').innerText}`,
+        '',
+        'Ementa/Resumo',
+        document.getElementById('vis-ementa').innerText,
+        '',
+        'Objetivo',
+        document.getElementById('vis-objetivo').innerText,
+        '',
+        'Conteúdos Complementares',
+        document.getElementById('vis-conteudos').innerText,
+        '',
+        'Recursos de Apoio',
+        document.getElementById('vis-recursos').innerText,
+        '',
+        'Tags Recomendadas',
+        document.getElementById('vis-tags').innerText
+    ].join('\n');
+}
+
+function obterDadosPlanoVisualizado() {
+    return {
+        titulo: document.getElementById('vis-titulo').innerText,
+        disciplina: document.getElementById('vis-disciplina').innerText,
+        data: document.getElementById('vis-data').innerText,
+        ementa: document.getElementById('vis-ementa').innerText,
+        objetivo: document.getElementById('vis-objetivo').innerText,
+        conteudos: document.getElementById('vis-conteudos').innerText,
+        recursos: document.getElementById('vis-recursos').innerText,
+        tags: document.getElementById('vis-tags').innerText
+    };
+}
+
+btnImprimir.addEventListener('click', () => {
+    const plano = obterDadosPlanoVisualizado();
+    const nomeInstituicao = 'V-Lab';
+    const rodapeInstituicao = 'Plano gerado pelo SmartPlanner';
+
+    const janelaImpressao = window.open('', '_blank', 'width=900,height=700');
+
+    if (!janelaImpressao) {
+        alert('O navegador bloqueou a janela de impressão. Permita pop-ups e tente novamente.');
+        return;
+    }
+
+    janelaImpressao.document.write(`
+        <!DOCTYPE html>
+        <html lang="pt-BR">
+        <head>
+            <meta charset="UTF-8">
+            <title>Imprimir Plano de Aula</title>
+            <style>
+                * { box-sizing: border-box; }
+                body {
+                    font-family: Arial, sans-serif;
+                    margin: 0;
+                    color: #1f2937;
+                    background: #f8fafc;
+                }
+                .page {
+                    max-width: 900px;
+                    margin: 0 auto;
+                    padding: 32px;
+                    background: #fff;
+                    min-height: 100vh;
+                    position: relative;
+                }
+                .print-header {
+                    border-bottom: 4px solid #0d6efd;
+                    padding-bottom: 16px;
+                    margin-bottom: 24px;
+                }
+                .school-name {
+                    font-size: 13px;
+                    font-weight: 700;
+                    letter-spacing: 0.08em;
+                    text-transform: uppercase;
+                    color: #0d6efd;
+                    margin-bottom: 6px;
+                }
+                .document-title {
+                    font-size: 28px;
+                    margin: 0;
+                    line-height: 1.1;
+                }
+                .document-subtitle {
+                    margin: 6px 0 0;
+                    color: #6b7280;
+                    font-size: 14px;
+                }
+                .meta-grid {
+                    display: grid;
+                    grid-template-columns: repeat(2, minmax(0, 1fr));
+                    gap: 12px;
+                    margin-bottom: 24px;
+                }
+                .meta-card {
+                    border: 1px solid #e5e7eb;
+                    border-radius: 12px;
+                    padding: 14px 16px;
+                    background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+                }
+                .meta-label {
+                    display: block;
+                    font-size: 11px;
+                    letter-spacing: 0.08em;
+                    text-transform: uppercase;
+                    color: #6b7280;
+                    margin-bottom: 6px;
+                }
+                .meta-value {
+                    font-size: 16px;
+                    font-weight: 700;
+                    color: #111827;
+                }
+                .section {
+                    margin-top: 18px;
+                    padding: 18px 20px;
+                    border: 1px solid #e5e7eb;
+                    border-radius: 14px;
+                    background: #fff;
+                    page-break-inside: avoid;
+                }
+                .section h2 {
+                    margin: 0 0 10px;
+                    font-size: 16px;
+                    color: #0f172a;
+                }
+                .section p {
+                    margin: 0;
+                    white-space: pre-wrap;
+                    line-height: 1.6;
+                    color: #374151;
+                }
+                .footer {
+                    margin-top: 28px;
+                    padding-top: 14px;
+                    border-top: 1px solid #dbe3ea;
+                    display: flex;
+                    justify-content: space-between;
+                    gap: 16px;
+                    color: #6b7280;
+                    font-size: 12px;
+                }
+                .footer strong {
+                    color: #374151;
+                }
+                @media print {
+                    body { background: #fff; }
+                    .page { padding: 24px 28px; }
+                }
+            </style>
+        </head>
+        <body>
+            <div class="page">
+                <header class="print-header">
+                    <div class="school-name">${nomeInstituicao}</div>
+                    <h1 class="document-title">${plano.titulo}</h1>
+                    <p class="document-subtitle">Plano de aula para impressão e arquivamento</p>
+                </header>
+
+                <div class="meta-grid">
+                    <div class="meta-card">
+                        <span class="meta-label">Disciplina</span>
+                        <div class="meta-value">${plano.disciplina}</div>
+                    </div>
+                    <div class="meta-card">
+                        <span class="meta-label">Data prevista</span>
+                        <div class="meta-value">${plano.data}</div>
+                    </div>
+                </div>
+
+                <section class="section">
+                    <h2>Ementa/Resumo</h2>
+                    <p>${plano.ementa}</p>
+                </section>
+
+                <section class="section">
+                    <h2>Objetivo</h2>
+                    <p>${plano.objetivo}</p>
+                </section>
+
+                <section class="section">
+                    <h2>Conteúdos Complementares</h2>
+                    <p>${plano.conteudos}</p>
+                </section>
+
+                <section class="section">
+                    <h2>Recursos de Apoio</h2>
+                    <p>${plano.recursos}</p>
+                </section>
+
+                <section class="section">
+                    <h2>Tags Recomendadas</h2>
+                    <p>${plano.tags}</p>
+                </section>
+
+                <footer class="footer">
+                    <div><strong>${nomeInstituicao}</strong></div>
+                    <div>${rodapeInstituicao}</div>
+                </footer>
+            </div>
+            <script>
+                window.onload = () => { window.print(); window.onafterprint = () => window.close(); };
+            <\/script>
+        </body>
+        </html>
+    `);
+    janelaImpressao.document.close();
+});
+
+btnCompartilhar.addEventListener('click', async () => {
+    const textoPlano = obterTextoPlanoVisualizado();
+
+    if (navigator.share) {
+        try {
+            await navigator.share({
+                title: document.getElementById('vis-titulo').innerText,
+                text: textoPlano
+            });
+        } catch (error) {
+            if (error.name !== 'AbortError') {
+                console.error('Erro ao compartilhar:', error);
+                alert('Não foi possível compartilhar este plano.');
+            }
+        }
+        return;
+    }
+
+    try {
+        await navigator.clipboard.writeText(textoPlano);
+        alert('Resumo copiado para a área de transferência.');
+    } catch (error) {
+        console.error('Erro ao copiar para a área de transferência:', error);
+        alert('O navegador não suporta compartilhamento nem cópia automática.');
+    }
+});
+
 // Função chamada pelo botão "Editar" na tabela
 window.carregarParaEdicao = async (id) => {
     try {
