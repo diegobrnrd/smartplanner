@@ -62,4 +62,4 @@ Caso prefira rodar a aplicação diretamente na sua máquina:
 
 Clique na imagem abaixo para assistir ao vídeo de apresentação detalhando a arquitetura, as funcionalidades e as decisões técnicas do desenvolvimento:
 
-[![Demonstração SmartPlanner](https://img.youtube.com/vi/COLOQUE_O_ID_DO_VIDEO_AQUI/maxresdefault.jpg)](https://www.youtube.com/watch?v=COLOQUE_O_ID_DO_VIDEO_AQUI)
+[![Demonstração SmartPlanner](https://img.youtube.com/vi/ukNhC00EYoo/maxresdefault.jpg)](https://youtu.be/ukNhC00EYoo)
