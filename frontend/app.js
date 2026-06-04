@@ -26,6 +26,40 @@ const btnImprimir = document.getElementById('btn-imprimir');
 const btnCompartilhar = document.getElementById('btn-compartilhar');
 
 // ==========================================
+// SISTEMA DE NOTIFICAÇÕES (TOAST)
+// ==========================================
+function mostrarNotificacao(mensagem, tipo = 'success') {
+    const toastContainer = document.getElementById('toast-container') || criarToastContainer();
+    
+    const toastEl = document.createElement('div');
+    toastEl.className = `alert alert-${tipo === 'success' ? 'success' : 'warning' === tipo ? 'warning' : 'danger'} alert-dismissible fade show`;
+    toastEl.setAttribute('role', 'alert');
+    toastEl.style.minWidth = '300px';
+    toastEl.innerHTML = `
+        <strong>SmartPlanner diz:</strong> ${mensagem}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    `;
+    
+    toastContainer.appendChild(toastEl);
+    
+    // Remove automaticamente após 4 segundos
+    setTimeout(() => {
+        toastEl.remove();
+    }, 4000);
+}
+
+function criarToastContainer() {
+    const container = document.createElement('div');
+    container.id = 'toast-container';
+    container.style.position = 'fixed';
+    container.style.top = '20px';
+    container.style.right = '20px';
+    container.style.zIndex = '1051';
+    document.body.appendChild(container);
+    return container;
+}
+
+// ==========================================
 // 1. NAVEGAÇÃO DA SPA
 // ==========================================
 function mostrarListagem() {
@@ -60,7 +94,7 @@ btnIA.addEventListener('click', async () => {
     const ementa = document.getElementById('ementa').value;
 
     if (!titulo || !disciplina || !ementa) {
-        alert('Por favor, preencha o Título, a Disciplina e a Ementa antes de chamar a IA.');
+        mostrarNotificacao('Por favor, preencha o Título, a Disciplina e a Ementa antes de chamar a IA.', 'warning');
         return;
     }
 
@@ -81,12 +115,13 @@ btnIA.addEventListener('click', async () => {
             document.getElementById('conteudos').value = data.conteudos_complementares || '';
             document.getElementById('recursos_apoio').value = data.topicos_relacionados || '';
             document.getElementById('tags').value = data.tags_recomendadas || '';
+            mostrarNotificacao('Recomendações geradas com sucesso pela IA!', 'success');
         } else {
-            alert(`Erro da IA: ${data.erro || 'Desconhecido'}`);
+            mostrarNotificacao(`Erro da IA: ${data.erro || 'Desconhecido'}`, 'danger');
         }
     } catch (error) {
         console.error('Erro ao conectar com a IA:', error);
-        alert('Falha de comunicação com o servidor. Verifique se o backend está rodando.');
+        mostrarNotificacao('Falha de comunicação com o servidor. Verifique se o backend está rodando.', 'danger');
     } finally {
         // Esconde o loading state
         aiLoading.classList.add('d-none');
@@ -200,15 +235,15 @@ formPlano.addEventListener('submit', async (e) => {
         });
 
         if (response.ok) {
-            alert(id ? 'Plano atualizado com sucesso!' : 'Plano cadastrado com sucesso!');
+            mostrarNotificacao(id ? 'Plano atualizado com sucesso!' : 'Plano cadastrado com sucesso!', 'success');
             mostrarListagem(); // Volta para a tabela
         } else {
             const data = await response.json();
-            alert(`Erro ao salvar: ${data.erro}`);
+            mostrarNotificacao(`Erro ao salvar: ${data.erro}`, 'danger');
         }
     } catch (error) {
         console.error('Erro ao salvar plano:', error);
-        alert('Erro ao se comunicar com o servidor.');
+        mostrarNotificacao('Erro ao se comunicar com o servidor.', 'danger');
     }
 });
 
@@ -289,7 +324,7 @@ btnImprimir.addEventListener('click', () => {
     const janelaImpressao = window.open('', '_blank', 'width=900,height=700');
 
     if (!janelaImpressao) {
-        alert('O navegador bloqueou a janela de impressão. Permita pop-ups e tente novamente.');
+        mostrarNotificacao('O navegador bloqueou a janela de impressão. Permita pop-ups e tente novamente.', 'warning');
         return;
     }
 
@@ -471,7 +506,7 @@ btnCompartilhar.addEventListener('click', async () => {
         } catch (error) {
             if (error.name !== 'AbortError') {
                 console.error('Erro ao compartilhar:', error);
-                alert('Não foi possível compartilhar este plano.');
+                mostrarNotificacao('Não foi possível compartilhar este plano.', 'danger');
             }
         }
         return;
@@ -479,10 +514,10 @@ btnCompartilhar.addEventListener('click', async () => {
 
     try {
         await navigator.clipboard.writeText(textoPlano);
-        alert('Resumo copiado para a área de transferência.');
+        mostrarNotificacao('Resumo copiado para a área de transferência.', 'success');
     } catch (error) {
         console.error('Erro ao copiar para a área de transferência:', error);
-        alert('O navegador não suporta compartilhamento nem cópia automática.');
+        mostrarNotificacao('O navegador não suporta compartilhamento nem cópia automática.', 'danger');
     }
 });
 
@@ -518,13 +553,14 @@ window.excluirPlano = async (id) => {
         try {
             const response = await fetch(`${API_URL}/planos/${id}`, { method: 'DELETE' });
             if (response.ok) {
+                mostrarNotificacao('Plano excluído com sucesso!', 'success');
                 carregarPlanos(); // Recarrega a tabela
             } else {
-                alert('Erro ao excluir o plano.');
+                mostrarNotificacao('Erro ao excluir o plano.', 'danger');
             }
         } catch (error) {
             console.error('Erro ao excluir:', error);
-            alert('Erro ao se comunicar com o servidor.');
+            mostrarNotificacao('Erro ao se comunicar com o servidor.', 'danger');
         }
     }
 };
