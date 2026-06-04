@@ -106,10 +106,13 @@ def listar_planos():
     titulo = request.args.get('titulo')
     
     # Captura de parâmetros de ordenação e paginação
-    ordenar_por = request.args.get('ordenar_por', 'data_cadastro') # 'titulo' ou 'data_cadastro'
-    ordem = request.args.get('ordem', 'desc') # 'asc' ou 'desc'
+    ordenar_por = request.args.get('ordenar_por', 'data_cadastro')
+    ordem = request.args.get('ordem', 'desc')
     page = request.args.get('page', 1, type=int)
     per_page = request.args.get('per_page', 10, type=int)
+    
+    # LOG ESTRUTURADO: Registra requisição GET
+    logger.info(f'GET /planos: Page={page}, PerPage={per_page}, OrderBy={ordenar_por}-{ordem}, Filters=[Title={bool(titulo)}, Discipline={bool(disciplina)}, Tags={bool(tags)}, Date={bool(data_prevista)}]')
     
     query = PlanoAula.query
     
@@ -119,9 +122,9 @@ def listar_planos():
     if tags:
         query = query.filter(PlanoAula.tags.ilike(f'%{tags}%'))
     if data_prevista:
-        query = query.filter(PlanoAula.data_prevista == data_prevista) # Busca exata pela data
+        query = query.filter(PlanoAula.data_prevista == data_prevista)
     if titulo:
-        query = query.filter(PlanoAula.titulo.ilike(f'%{titulo}%')) # Busca parcial pelo título
+        query = query.filter(PlanoAula.titulo.ilike(f'%{titulo}%'))
         
     # 2. Aplica a Ordenação
     if ordenar_por == 'titulo':
@@ -129,7 +132,7 @@ def listar_planos():
             query = query.order_by(PlanoAula.titulo.asc())
         else:
             query = query.order_by(PlanoAula.titulo.desc())
-    else: # Padrão é ordenar por data_cadastro
+    else:
         if ordem == 'asc':
             query = query.order_by(PlanoAula.data_cadastro.asc())
         else:
@@ -139,6 +142,9 @@ def listar_planos():
     planos_paginados = query.paginate(page=page, per_page=per_page, error_out=False)
     
     resultado = [plano.to_dict() for plano in planos_paginados.items]
+    
+    # LOG ESTRUTURADO: Registra resultado
+    logger.info(f'GET /planos Response: TotalRecords={planos_paginados.total}, TotalPages={planos_paginados.pages}, ReturnedRecords={len(resultado)}')
     
     return jsonify({
         "total_registros": planos_paginados.total,
