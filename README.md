@@ -38,14 +38,9 @@ Modal interativo mostrando todos os detalhes do plano, incluindo conteúdos comp
 ### 3️⃣ Geração de PDF para Impressão
 Documento formatado profissionalmente pronto para impressão e arquivamento.
 
-<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-  <div>
-    <img src="assets/03-impressao-parte1.png" width="100%" alt="Impressão - Topo">
-  </div>
-  <div>
-    <img src="assets/04-impressao-parte2.png" width="100%" alt="Impressão - Rodapé">
-  </div>
-</div>
+| | |
+|---|---|
+| ![Imagem 1](assets/03-impressao-parte1.png) | ![Imagem 2](assets/04-impressao-parte2.png) |
 
 ### 4️⃣ Formulário de Cadastro
 Tela limpa e intuitiva para criar novos planos de aula com campos para título, disciplina, ementa, objetivo e mais.
