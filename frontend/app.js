@@ -283,7 +283,7 @@ function obterDadosPlanoVisualizado() {
 
 btnImprimir.addEventListener('click', () => {
     const plano = obterDadosPlanoVisualizado();
-    const nomeInstituicao = 'V-Lab';
+    const nomeInstituicao = 'Instituição de Ensino XYZ';
     const rodapeInstituicao = 'Plano gerado pelo SmartPlanner';
 
     const janelaImpressao = window.open('', '_blank', 'width=900,height=700');
