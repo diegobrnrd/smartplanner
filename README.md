@@ -23,6 +23,55 @@ Esta é uma aplicação completa para o gerenciamento de planos de aula, contand
 * **Integração Contínua (CI):** Pipeline configurado no GitHub Actions garantindo a qualidade do código a cada *push*.
 * **Developer Experience (DX):** Landing page amigável na raiz da API e endpoint de verificação de saúde (`/health`).
 
+## 📸 Galeria de Screenshots
+
+### 1️⃣ Tela Principal - Listagem e Filtros
+Visualize, edite e gerencie seus planos de aula com filtros avançados por título, disciplina, tags e data.
+
+![Listagem de Planos](assets/01-listagem.png)
+
+### 2️⃣ Visualização Detalhada
+Modal interativo mostrando todos os detalhes do plano, incluindo conteúdos complementares e recomendações geradas pela IA.
+
+![Visualização Detalhada](assets/02-visualizacao.png)
+
+### 3️⃣ Geração de PDF para Impressão
+Documento formatado profissionalmente pronto para impressão e arquivamento.
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+  <div>
+    <img src="assets/03-impressao-parte1.png" width="100%" alt="Impressão - Topo">
+  </div>
+  <div>
+    <img src="assets/04-impressao-parte2.png" width="100%" alt="Impressão - Rodapé">
+  </div>
+</div>
+
+### 4️⃣ Formulário de Cadastro
+Tela limpa e intuitiva para criar novos planos de aula com campos para título, disciplina, ementa, objetivo e mais.
+
+![Formulário Vazio](assets/05-formulario-vazio.png)
+
+### 5️⃣ Smart Assist em Ação
+O botão "✨ Gerar Recomendações com IA" ativa um estado de carregamento elegante enquanto a IA processa o conteúdo.
+
+![IA Processando](assets/06-ia-carregando.png)
+
+### 6️⃣ Conteúdos Auto-Preenchidos
+Após processar, a IA preenche automaticamente os campos de conteúdos complementares, recursos de apoio e tags recomendadas.
+
+![Formulário Preenchido](assets/07-formulario-preenchido.png)
+
+### 7️⃣ Landing Page da API
+Interface amigável que confirma que o servidor backend está rodando e pronto para receber requisições.
+
+![Status da API](assets/08-api-online.png)
+
+### 8️⃣ Health Check - Monitoramento
+Endpoint de verificação de saúde da API que retorna o status em tempo real, essencial para monitoramento e observabilidade.
+
+![Health Check](assets/09-health-check.png)
+
 ## 🐳 Como executar com Docker (Recomendado)
 
 A aplicação está totalmente containerizada para facilitar a avaliação e garantir a padronização do ambiente.
