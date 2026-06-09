@@ -73,17 +73,21 @@ Formulário para criação e atualização dos planos de aula.
 
 Processamento da IA e preenchimento automático de recomendações.
 
-| IA processando | Campos preenchidos |
-|---|---|
-| ![IA Processando](assets/06-ia-carregando.png) | ![Formulário Preenchido](assets/07-formulario-preenchido.png) |
+#### IA processando
+![IA Processando](assets/06-ia-carregando.png)
+
+#### Campos preenchidos
+![Formulário Preenchido](assets/07-formulario-preenchido.png)
 
 ### API
 
 Página de status e endpoint de health check.
 
-| API online | Health check |
-|---|---|
-| ![API Online](assets/08-api-online.png) | ![Health Check](assets/09-health-check.png) |
+#### API online
+![API Online](assets/08-api-online.png)
+
+#### Health check
+![Health Check](assets/09-health-check.png)
 
 ---
 
