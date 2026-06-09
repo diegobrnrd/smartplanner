@@ -1,7 +1,7 @@
 # SmartPlanner
 
 <div align="center">
-  <img src="assets/smartplanner.png" alt="SmartPlanner" width="96" height="96">
+  <img src="assets/smartplanner.png" alt="SmartPlanner" width="886" height="470,5">
 
   <h3>Plataforma web para criação, organização e enriquecimento de planos de aula com Inteligência Artificial.</h3>
 
