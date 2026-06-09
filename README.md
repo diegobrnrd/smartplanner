@@ -1,103 +1,408 @@
-# SmartPlanner - API de Planos de Aula com IA
+# SmartPlanner
 
-Esta é uma aplicação completa para o gerenciamento de planos de aula, contando com a integração de Inteligência Artificial para gerar recomendações dinâmicas de conteúdo pedagógico e foco total em Experiência do Usuário (UX) e Developer Experience (DX).
+<div align="center">
+  <img src="assets/smartplanner.png" alt="SmartPlanner" width="96" height="96">
 
-## 🚀 Tecnologias Utilizadas
+  <h3>Plataforma web para criação, organização e enriquecimento de planos de aula com Inteligência Artificial.</h3>
 
-* **Backend:** Python 3.11, Flask, SQLAlchemy, SQLite
-* **Frontend:** HTML5, CSS3 (Bootstrap 5), Vanilla JavaScript
-* **Inteligência Artificial:** Google Gemini (modelo `gemini-2.5-flash`)
-* **DevOps e Observabilidade:** Docker, Docker Compose, GitHub Actions (CI para linting com Flake8), Logging estruturado
+  <p>
+    <img alt="Python" src="https://img.shields.io/badge/Python-3.11-3776AB?style=for-the-badge&logo=python&logoColor=white">
+    <img alt="Flask" src="https://img.shields.io/badge/Flask-API-000000?style=for-the-badge&logo=flask&logoColor=white">
+    <img alt="JavaScript" src="https://img.shields.io/badge/JavaScript-Vanilla-F7DF1E?style=for-the-badge&logo=javascript&logoColor=000">
+    <img alt="Bootstrap" src="https://img.shields.io/badge/Bootstrap-5-7952B3?style=for-the-badge&logo=bootstrap&logoColor=white">
+    <img alt="Docker" src="https://img.shields.io/badge/Docker-Ready-2496ED?style=for-the-badge&logo=docker&logoColor=white">
+    <img alt="SQLite" src="https://img.shields.io/badge/SQLite-Database-003B57?style=for-the-badge&logo=sqlite&logoColor=white">
+  </p>
+</div>
 
-## ⚙️ Funcionalidades e Diferenciais
+---
 
-* **CRUD Completo:** Listagem, cadastro, edição e exclusão de planos de aula.
-* **Smart Assist (Integração com IA):** Geração automática de conteúdos complementares e tags relevantes baseadas no título, ementa e disciplina da aula.
-* **Interface SPA (Single Page Application):** Navegação fluida sem recarregamento da página, com feedback visual de carregamento (loading state).
-* **Experiência do Usuário (UX) Avançada:**
-  * Modal de visualização detalhada em modo somente leitura.
-  * Geração de layout otimizado nativamente para impressão de relatórios de aula.
-  * Integração com Web Share API e área de transferência (Clipboard) para compartilhamento nativo.
-* **Filtros e Paginação:** Busca avançada por título, disciplina, tags e data, com ordenação dinâmica.
-* **Observabilidade:** Logs estruturados no backend monitorando o tempo de resposta (latência) e uso de tokens da API de Inteligência Artificial, além das operações de banco de dados.
-* **Integração Contínua (CI):** Pipeline configurado no GitHub Actions garantindo a qualidade do código a cada *push*.
-* **Developer Experience (DX):** Landing page amigável na raiz da API e endpoint de verificação de saúde (`/health`).
+## Sobre o projeto
 
-## 📸 Galeria de Screenshots
+**SmartPlanner** é uma aplicação full stack desenvolvida para facilitar a criação e o gerenciamento de planos de aula. O sistema combina uma interface moderna e responsiva com uma API em Flask, persistência em SQLite e integração com o **Google Gemini** para gerar recomendações pedagógicas automaticamente.
 
-### 1️⃣ Tela Principal - Listagem e Filtros
-Visualize, edite e gerencie seus planos de aula com filtros avançados por título, disciplina, tags e data.
+O projeto foi pensado para demonstrar, em nível de portfólio, boas práticas de desenvolvimento web, organização de código, integração com API externa, experiência do usuário, containerização e observabilidade básica.
+
+---
+
+## Destaques
+
+- **CRUD completo de planos de aula**: cadastro, listagem, edição, visualização e exclusão.
+- **Smart Assist com IA**: geração automática de conteúdos complementares, recursos de apoio e tags.
+- **Frontend SPA com Vanilla JavaScript**: navegação fluida sem recarregar a página.
+- **Interface moderna e responsiva**: layout com cards, filtros, modal detalhado, estados de loading e feedback visual.
+- **Tratamento visual para textos longos**: disciplinas extensas e tags não quebram o layout da listagem.
+- **Busca, filtros e ordenação**: pesquisa por título, disciplina, tags, data prevista e ordenação dinâmica.
+- **Impressão profissional**: geração de uma versão formatada do plano para impressão.
+- **Compartilhamento**: suporte à Web Share API e fallback para copiar o conteúdo para a área de transferência.
+- **Backend com logs estruturados**: registro de operações, filtros aplicados, latência e uso da IA.
+- **Ambiente Dockerizado**: execução padronizada com Docker e Docker Compose.
+- **Persistência de dados**: banco SQLite mantido em volume Docker ou na pasta `instance`, dependendo da configuração usada.
+
+---
+
+## Demonstração visual
+
+### Tela principal
+
+Listagem dos planos de aula com filtros, paginação e ações rápidas.
 
 ![Listagem de Planos](assets/01-listagem.png)
 
-### 2️⃣ Visualização Detalhada
-Modal interativo mostrando todos os detalhes do plano, incluindo conteúdos complementares e recomendações geradas pela IA.
+### Visualização detalhada
+
+Modal com todos os dados do plano, incluindo conteúdos gerados ou complementados pela IA.
 
 ![Visualização Detalhada](assets/02-visualizacao.png)
 
-### 3️⃣ Geração de PDF para Impressão
-Documento formatado profissionalmente pronto para impressão e arquivamento.
+### Impressão do plano
 
-| | |
+Layout limpo e organizado para impressão ou arquivamento.
+
+| Impressão - Parte 1 | Impressão - Parte 2 |
 |---|---|
-| ![Imagem 1](assets/03-impressao-parte1.png) | ![Imagem 2](assets/04-impressao-parte2.png) |
+| ![Impressão](assets/03-impressao-parte1.png) | ![Impressão Parte 2](assets/04-impressao-parte2.png) |
 
-### 4️⃣ Formulário de Cadastro
-Tela limpa e intuitiva para criar novos planos de aula com campos para título, disciplina, ementa, objetivo e mais.
+### Cadastro e edição
 
-![Formulário Vazio](assets/05-formulario-vazio.png)
+Formulário para criação e atualização dos planos de aula.
 
-### 5️⃣ Smart Assist em Ação
-O botão "✨ Gerar Recomendações com IA" ativa um estado de carregamento elegante enquanto a IA processa o conteúdo.
+![Formulário](assets/05-formulario-vazio.png)
 
-![IA Processando](assets/06-ia-carregando.png)
+### Smart Assist
 
-### 6️⃣ Conteúdos Auto-Preenchidos
-Após processar, a IA preenche automaticamente os campos de conteúdos complementares, recursos de apoio e tags recomendadas.
+Processamento da IA e preenchimento automático de recomendações.
 
-![Formulário Preenchido](assets/07-formulario-preenchido.png)
+| IA processando | Campos preenchidos |
+|---|---|
+| ![IA Processando](assets/06-ia-carregando.png) | ![Formulário Preenchido](assets/07-formulario-preenchido.png) |
 
-### 7️⃣ Landing Page da API
-Interface amigável que confirma que o servidor backend está rodando e pronto para receber requisições.
+### API
 
-![Status da API](assets/08-api-online.png)
+Página de status e endpoint de health check.
 
-### 8️⃣ Health Check - Monitoramento
-Endpoint de verificação de saúde da API que retorna o status em tempo real, essencial para monitoramento e observabilidade.
+| API online | Health check |
+|---|---|
+| ![API Online](assets/08-api-online.png) | ![Health Check](assets/09-health-check.png) |
 
-![Health Check](assets/09-health-check.png)
+---
 
-## 🐳 Como executar com Docker (Recomendado)
+## Arquitetura
 
-A aplicação está totalmente containerizada para facilitar a avaliação e garantir a padronização do ambiente.
+```mermaid
+flowchart LR
+    A[Usuário] --> B[Frontend SPA<br>HTML, CSS, JavaScript]
+    B --> C[API Flask]
+    C --> D[(SQLite)]
+    C --> E[Google Gemini API]
+    F[Docker Compose] --> B
+    F --> C
+```
 
-1. Clone este repositório para a sua máquina local.
-2. Na raiz do projeto, crie um arquivo chamado `.env` e adicione a sua chave de API do Gemini:
-   ```env
-   GEMINI_API_KEY=sua_chave_aqui
-   ```
-3. Execute o comando no terminal para construir e subir os containers:
-   ```bash
-   docker-compose up --build -d
-   ```
-4. **Acessando o Sistema:**
-   * **Frontend (Interface Visual):** Acesse `http://localhost:8080` no seu navegador.
-   * **Backend (API):** Acesse `http://localhost:5000` para ver a página de status do servidor ou `http://localhost:5000/health` para o endpoint de monitoramento.
+### Fluxo principal
 
-## 💻 Como executar localmente (Sem Docker)
+1. O usuário cadastra ou edita um plano de aula pelo frontend.
+2. O frontend envia os dados para a API Flask.
+3. A API valida os campos e persiste os dados no SQLite.
+4. Quando o Smart Assist é acionado, a API envia título, disciplina e ementa para o Gemini.
+5. A IA retorna recomendações, conteúdos complementares e tags.
+6. O frontend preenche os campos automaticamente e permite salvar o plano.
 
-Caso prefira rodar a aplicação diretamente na sua máquina:
+---
 
-1. Crie e ative um ambiente virtual:
-   * Windows: `python -m venv venv` e depois `venv\Scripts\activate`
-   * Linux/Mac: `python3 -m venv venv` e depois `source venv/bin/activate`
-2. Instale as dependências listadas:
-   ```bash
-   pip install -r requirements.txt
-   ```
-3. Configure o arquivo `.env` com a sua chave `GEMINI_API_KEY`.
-4. Inicie o servidor Flask:
-   ```bash
-   python app.py
-   ```
-5. Para acessar a interface, abra o arquivo `index.html` (localizado dentro da pasta `frontend`) diretamente no seu navegador.
+## Tecnologias utilizadas
+
+### Frontend
+
+- HTML5
+- CSS3
+- Bootstrap 5
+- Bootstrap Icons
+- Vanilla JavaScript
+- Web Share API
+- Clipboard API
+
+### Backend
+
+- Python 3.11
+- Flask
+- Flask-CORS
+- Flask-SQLAlchemy
+- SQLite
+- Google GenAI SDK
+- python-dotenv
+- Gunicorn
+
+### DevOps e qualidade
+
+- Docker
+- Docker Compose
+- GitHub Actions
+- Linter para validação de código
+- Health check da API
+- Logs estruturados no backend
+
+---
+
+## Estrutura do projeto
+
+```text
+smartplanner/
+├── .github
+│   └── workflows
+│       └── linter.yml
+├── assets/
+│   ├── 01-listagem.png
+│   ├── 02-visualizacao.png
+│   ├── 03-impressao-parte1.png
+│   ├── 04-impressao-parte2.png
+│   ├── 05-formulario-vazio.png
+│   ├── 06-ia-carregando.png
+│   ├── 07-formulario-preenchido.png
+│   ├── 08-api-online.png
+│   └── 09-health-check.png
+├── frontend/
+│   ├── index.html
+│   ├── app.js
+│   ├── style.css
+│   └── favicon.png
+├── .env
+├── .gitattributes
+├── .gitignore
+├── app.py
+├── docker-compose.yml
+├── Dockerfile
+├── README.md
+└── requirements.txt
+```
+
+---
+
+## Variáveis de ambiente
+
+Crie um arquivo `.env` na raiz do projeto:
+
+```env
+GEMINI_API_KEY=sua_chave_da_api_gemini
+```
+
+---
+
+## Como executar com Docker
+
+### 1. Clone o repositório
+
+```bash
+git clone https://github.com/diegobrnrd/smartplanner.git
+cd smartplanner
+```
+
+### 2. Configure o `.env`
+
+```bash
+GEMINI_API_KEY=sua_chave_da_api_gemini
+```
+
+### 3. Suba os containers
+
+Com Docker Compose v2:
+
+```bash
+docker compose up --build -d
+```
+
+Ou, se estiver usando a versão clássica:
+
+```bash
+docker-compose up --build -d
+```
+
+### 4. Acesse a aplicação
+
+- **Frontend:** `http://localhost:8080`
+- **Backend:** `http://localhost:5000`
+- **Health check:** `http://localhost:5000/health`
+
+### 5. Verifique os logs
+
+```bash
+docker logs smartplanner-api
+```
+
+### 6. Parar a aplicação
+
+```bash
+docker compose down
+```
+
+Para remover também os dados persistidos em volume:
+
+```bash
+docker compose down -v
+```
+
+> Atenção: o comando com `-v` remove o volume do banco de dados e apaga os planos cadastrados no ambiente Docker.
+
+---
+
+## Como executar localmente sem Docker
+
+### 1. Crie o ambiente virtual
+
+Windows:
+
+```bash
+python -m venv venv
+venv\Scripts\activate
+```
+
+Linux/macOS:
+
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
+
+### 2. Instale as dependências
+
+```bash
+pip install -r requirements.txt
+```
+
+### 3. Configure o `.env`
+
+```env
+GEMINI_API_KEY=sua_chave_da_api_gemini
+```
+
+### 4. Execute o backend
+
+```bash
+python app.py
+```
+
+### 5. Execute o frontend
+
+Abra o arquivo `frontend/index.html` no navegador ou use uma extensão como **Live Server** no VS Code.
+
+---
+
+## Banco de dados
+
+O projeto utiliza **SQLite**.
+
+- Em execução local com Flask, o banco normalmente fica em `instance/planos_aula.db`.
+- Em execução com Docker, o banco pode ser persistido em um **volume Docker** ou em um bind mount, dependendo do `docker-compose.yml` usado.
+
+Para listar volumes Docker:
+
+```bash
+docker volume ls
+```
+
+Para inspecionar um volume específico:
+
+```bash
+docker volume inspect nome_do_volume
+```
+
+Para resetar os dados do ambiente Docker:
+
+```bash
+docker compose down -v
+```
+
+---
+
+## Endpoints da API
+
+| Método | Rota | Descrição |
+|---|---|---|
+| `GET` | `/` | Página de status da API |
+| `GET` | `/health` | Verifica se a API está online |
+| `GET` | `/planos` | Lista planos com filtros, paginação e ordenação |
+| `GET` | `/planos/<id>` | Retorna um plano específico |
+| `POST` | `/planos` | Cria um novo plano de aula |
+| `PUT` | `/planos/<id>` | Atualiza um plano existente |
+| `DELETE` | `/planos/<id>` | Remove um plano |
+| `POST` | `/smart-assist` | Gera recomendações pedagógicas com IA |
+
+### Exemplo de criação de plano
+
+```bash
+curl -X POST http://localhost:5000/planos \
+  -H "Content-Type: application/json" \
+  -d '{
+    "titulo": "Introdução a APIs REST",
+    "objetivo": "Compreender os fundamentos de APIs REST e seus principais métodos HTTP.",
+    "ementa": "Conceitos de API, arquitetura REST, endpoints, recursos e status HTTP.",
+    "data_prevista": "2026-06-09",
+    "disciplina": "Desenvolvimento Web",
+    "conteudos": "HTTP, JSON, REST, boas práticas de endpoints.",
+    "recursos_apoio": "Documentação, exemplos práticos e exercícios guiados.",
+    "tags": "API, REST, HTTP"
+  }'
+```
+
+### Exemplo de uso do Smart Assist
+
+```bash
+curl -X POST http://localhost:5000/smart-assist \
+  -H "Content-Type: application/json" \
+  -d '{
+    "titulo": "Introdução a Banco de Dados",
+    "disciplina": "Banco de Dados",
+    "ementa": "Conceitos iniciais de modelagem, tabelas, chaves e relacionamentos."
+  }'
+```
+
+Resposta esperada:
+
+```json
+{
+  "conteudos_complementares": "Sugestões de conteúdos para aprofundamento...",
+  "topicos_relacionados": "Tópicos e recursos de apoio relacionados...",
+  "tags_recomendadas": "Modelagem, SQL, Banco de Dados"
+}
+```
+
+---
+
+## Qualidade e observabilidade
+
+O backend registra eventos importantes da aplicação, como:
+
+- criação, edição e exclusão de planos;
+- filtros aplicados na listagem;
+- quantidade de registros retornados;
+- chamadas para a IA;
+- latência da geração de recomendações;
+- erros de comunicação com serviços externos.
+
+Esses logs ajudam a demonstrar preocupação com manutenção, depuração e acompanhamento do comportamento da aplicação.
+
+---
+
+## Melhorias futuras
+
+- Autenticação de usuários.
+- Migração para PostgreSQL em produção.
+- Testes automatizados para backend e frontend.
+- Deploy em ambiente cloud.
+- Histórico de versões dos planos de aula.
+- Dashboard com estatísticas por disciplina, tags e período.
+- Geração de plano completo em formato padronizado usando IA.
+
+---
+
+## Autor
+
+Desenvolvido por **Diego Bernardo**.
+
+- GitHub: [@diegobrnrd](https://github.com/diegobrnrd)
+
+---
+
+## Licença
+
+Este projeto está disponível para fins de estudo, portfólio e evolução profissional.

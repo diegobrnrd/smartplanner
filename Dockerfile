@@ -1,18 +1,25 @@
-# Usa uma imagem oficial leve do Python
 FROM python:3.11-slim
 
-# Define o diretório de trabalho dentro do container
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    PIP_NO_CACHE_DIR=1 \
+    PORT=5000 \
+    DATA_DIR=/data
+
 WORKDIR /app
 
-# Copia o arquivo de dependências e instala tudo
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+COPY requirements.txt ./requirements.txt
 
-# Copia o resto do código do backend para o container
-COPY app.py .
+RUN python -m pip install --upgrade pip \
+    && pip install --no-cache-dir -r requirements.txt \
+    && mkdir -p /data
 
-# Expõe a porta que o Flask vai rodar
+COPY app.py ./app.py
+
 EXPOSE 5000
 
-# Comando para iniciar a aplicação usando Gunicorn (servidor de produção)
-CMD ["gunicorn", "--bind", "0.0.0.0:5000", "app:app"]
+HEALTHCHECK --interval=20s --timeout=10s --start-period=40s --retries=5 \
+    CMD python -c "import urllib.request; urllib.request.urlopen('http://127.0.0.1:5000/health', timeout=5).read()" || exit 1
+
+CMD ["sh", "-c", "gunicorn --bind 0.0.0.0:${PORT} --workers ${GUNICORN_WORKERS:-2} --threads ${GUNICORN_THREADS:-4} --timeout ${GUNICORN_TIMEOUT:-120} app:app"]
