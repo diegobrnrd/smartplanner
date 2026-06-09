@@ -1,3 +1,64 @@
+# Ambientes virtuais Python
+
 venv/
-__pycache__/
+.venv/
+env/
+ENV/
+
+# Variáveis de ambiente
+
 .env
+.env.local
+.env.*.local
+
+# Cache e arquivos compilados Python
+
+**pycache**/
+*.py[cod]
+*$py.class
+
+# Banco de dados SQLite local
+
+*.db
+*.sqlite
+*.sqlite3
+instance/
+
+# Logs
+
+*.log
+logs/
+
+# Arquivos do sistema operacional
+
+.DS_Store
+Thumbs.db
+
+# Configurações de editores/IDEs
+
+.vscode/
+.idea/
+
+# Arquivos temporários
+
+*.tmp
+*.temp
+.cache/
+
+# Cobertura e testes
+
+.coverage
+htmlcov/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Docker/local
+
+docker-compose.override.yml
+
+# Node/npm, caso futuramente use dependências no frontend
+
+node_modules/
+dist/
+build/
